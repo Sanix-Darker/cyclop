@@ -26,7 +26,7 @@ The advantage with cyclops is that the use can be in another context, Example, I
 ## How to use it
 
 
-### To watch files
+### Watch files then execute a command
 
 You need to use the `f` parameter to watch files, and to test, you just have to hit for example :
 
@@ -57,7 +57,7 @@ You need to use the `f` parameter to watch files, and to test, you just have to 
 ./cyclop.sh f '(["./tests/test.rb"]="ruby ./tests/test.rb" ["./tests/test.js"]="node ./tests/test.js" ["./tests/test.py"]="python ./tests/test.py")'
 ```
 
-## DEMO
+### DEMO
 
 - With an interpreted language (JavaScript):
 ![Demo1](./images/demo.gif)
@@ -67,8 +67,7 @@ You need to use the `f` parameter to watch files, and to test, you just have to 
 ![Demo2](./images/demo2.gif)
 
 
-This is a video of the test with Cyclop : [SEE THE VIDEO](https://www.youtube.com/watch?v=xF5nznQwhcg)
-
+This is a video of the test with Cyclop on VSCODE : [SEE THE VIDEO](https://www.youtube.com/watch?v=xF5nznQwhcg)
 
 ## Author
 
