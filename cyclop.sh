@@ -41,9 +41,9 @@ then
     sum1=""
     while true
     do
+        sleep 1
         for file in ${!FILE_TO_WATCH[@]}
         do
-            sleep 1
             sum2="$(md5sum "$file")"
             logger "[+] $sum2"
             if [ "$sum1" = "$sum2" ];
@@ -53,18 +53,16 @@ then
                 clear
                 echo "[+] cyclop detected Changes on ${file}--------"
 
-                # if [[ ${FILE_TO_WATCH[$file]} == *"&&"* ]]; then
-                #     echo "It's there!"
-                # fi
-                # echo "[+] ${FILE_TO_WATCH[$file]}"
-                # ${FILE_TO_WATCH[$file]}
-
+                echo "[+] ${FILE_TO_WATCH[$file]}"
                 IFS='&&' read -ra command_list <<< "${FILE_TO_WATCH[$file]}"
+                echo ""
+                echo "[+] --------------------------------------------------"
                 for command in "${command_list[@]}"; do
-                    echo "[+] ${command}"
+                    # echo "[+] ${command}"
                     $command
                 done
-
+                echo ""
+                echo "[+] --------------------------------------------------"
                 sum1="$(md5sum "$file")"
                 logger "[+] $sum1"
             fi
@@ -73,7 +71,8 @@ then
 
 elif [ "$1" = "e" ]; # extension list
 then
+    echo "This feature not ready yet !"
     sleep 1
 else
-    echo "Bad parameters provided !"
+    echo "Bad parameters provided use ./cyclop f !"
 fi

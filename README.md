@@ -30,6 +30,11 @@ The advantage with cyclops is that the use can be in another context, Example, I
 
 You need to use the `f` parameter to watch files, and to test, you just have to hit for example :
 
+This is how to use it :
+`./cyclop.sh f '( ["./path/to/file/to/watch"]="command to execute when the file content will change" )'`
+
+Some implementations examples:
+
 ```shell
 
 # For C

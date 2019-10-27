@@ -9,6 +9,7 @@
 int main()
 {
    // printf() displays the string inside quotation
-   printf("Hello, World on C !");
+   printf("[+] Hello, World on C !");
+   printf("\n[+] Cyclop is just amazing right ?");
    return 0;
 }
