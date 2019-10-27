@@ -49,8 +49,18 @@ do
         else
             clear
             echo "[+] Cyclope detected Changes on ${file}--------"
-            echo "[+] ${FILE_TO_WATCH[$file]}"
-            ${FILE_TO_WATCH[$file]}
+
+            # if [[ ${FILE_TO_WATCH[$file]} == *"&&"* ]]; then
+            #     echo "It's there!"
+            # fi
+            # echo "[+] ${FILE_TO_WATCH[$file]}"
+            # ${FILE_TO_WATCH[$file]}
+
+            IFS='&&' read -ra command_list <<< "${FILE_TO_WATCH[$file]}"
+            for command in "${command_list[@]}"; do
+                echo "[+] ${command}"
+                $command
+            done
 
             sum1="$(md5sum "$file")"
             logger "[+] $sum1"

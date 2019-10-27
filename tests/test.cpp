@@ -12,5 +12,6 @@ int main()
 {
     // prints hello world
     cout<<"Hello World on CPP";
+    cout<<"\nMade by Sanix-darker !!!";
     return 0;
 }
