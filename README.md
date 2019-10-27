@@ -55,6 +55,21 @@ Some implementations examples:
 # For RUBY
 ./cyclop.sh f '( ["./tests/test.rb"]="ruby ./tests/test.rb" )'
 
+# For Rust
+./cyclop.sh f '(["./tests/test.rs"]="rustc ./tests/test.rs && ./test")'
+
+# For LUA
+./cyclop.sh f '(["./tests/test.lua"]="lua ./tests/test.lua")'
+
+# For HASKELL
+./cyclop.sh f '(["./tests/test.hs"]="runhaskell ./tests/test.hs")'
+
+# For ERLANG
+./cyclop.sh f '(["./tests/test.erl"]="erl -s ./tests/test.erl")'
+
+# For GO
+./cyclop.sh f '(["./tests/test.go"]="go run ./tests/test.go")'
+
 # You can combinate or add more LUA, Go, etc...
 
 # or multiple watching at the same time
