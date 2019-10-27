@@ -1,4 +1,4 @@
 *.out
 .history
 *__pycache__
-.class
+*.class

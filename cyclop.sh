@@ -46,10 +46,8 @@ then
         do
             sum2="$(md5sum "$file")"
             logger "[+] $sum2"
-            if [ "$sum1" = "$sum2" ];
+            if [ "$sum1" != "$sum2" ];
             then
-                sleep 1
-            else
                 clear
                 echo "[+] cyclop detected Changes on ${file}--------"
 
@@ -61,7 +59,6 @@ then
                     # echo "[+] ${command}"
                     $command
                 done
-                echo ""
                 echo "[+] --------------------------------------------------"
                 sum1="$(md5sum "$file")"
                 logger "[+] $sum1"
@@ -69,7 +66,8 @@ then
         done
     done
 
-elif [ "$1" = "e" ]; # extension list
+elif [ "$1" = "e" ]; # extension list, the logic here is to save in an associativ array the list of all file with a specific extensions,
+                    # and thier checkSum then looping throught them and execute a specific command when things changes
 then
     echo "This feature not ready yet !"
     sleep 1
