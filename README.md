@@ -25,45 +25,37 @@ The advantage with cyclops is that the use can be in another context, Example, I
 
 ## How to use it
 
-In cyclop.sh, you just need to configure the path of the file to watch and the command to do.
 
-```shell
-# We run the import of the table
-declare -A FILE_TO_WATCH=(["./tests/test.js"]="node ./tests/test.js")
-#
-# or multiple watching at the same time
-#
-# declare -A FILE_TO_WATCH=(["./tests/test.rb"]="ruby ./tests/test.rb" ["./tests/test.js"]="node ./tests/test.js" ["./tests/test.py"]="python ./tests/test.py")
-```
+### To watch files
 
-## Tests
-
-You can perform some tests with all available programs in `./test/` directory,just replace or add in cyclop.sh:
+You need to use the `f` parameter to watch files, and to test, you just have to hit for example :
 
 ```shell
 
 # For C
-declare -A FILE_TO_WATCH=( ["./tests/test.c"]="gcc ./tests/test.c && ./a.out" )
+./cyclop.sh f '( ["./tests/test.c"]="gcc ./tests/test.c && ./a.out" )'
 
 # For C++
-declare -A FILE_TO_WATCH=( ["./tests/test.cpp"]="g++ ./tests/test.c && ./a.out" )
+./cyclop.sh f '( ["./tests/test.cpp"]="g++ ./tests/test.cpp && ./a.out" )'
 
 # For JAVA
-declare -A FILE_TO_WATCH=( ["./tests/Test.java"]="javac ./tests/Test.java && cd tests && java Test && cd ../" )
+./cyclop.sh f '( ["./tests/Test.java"]="javac ./tests/Test.java && cd tests && java Test && cd ../" )'
 
 # For JAVASCRIPT
-declare -A FILE_TO_WATCH=( ["./tests/test.js"]="node ./tests/test.js" )
+./cyclop.sh f '( ["./tests/test.js"]="node ./tests/test.js" )'
 
 # For PYTHON
-declare -A FILE_TO_WATCH=( ["./tests/test.py"]="python ./tests/test.py" )
+./cyclop.sh f '( ["./tests/test.py"]="python ./tests/test.py" )'
 
 # For RUBY
-declare -A FILE_TO_WATCH=( ["./tests/test.rb"]="ruby ./tests/test.rb" )
+./cyclop.sh f '( ["./tests/test.rb"]="ruby ./tests/test.rb" )'
 
 # You can combinate or add more LUA, Go, etc...
 
+# or multiple watching at the same time
+#
+./cyclop.sh f '(["./tests/test.rb"]="ruby ./tests/test.rb" ["./tests/test.js"]="node ./tests/test.js" ["./tests/test.py"]="python ./tests/test.py")'
 ```
-
 
 ## DEMO
 
@@ -73,6 +65,9 @@ declare -A FILE_TO_WATCH=( ["./tests/test.rb"]="ruby ./tests/test.rb" )
 
 - With a compiled language (C++):
 ![Demo2](./images/demo2.gif)
+
+
+This is a video of the test with Cyclop : [SEE THE VIDEO](https://www.youtube.com/watch?v=xF5nznQwhcg)
 
 
 ## Author

@@ -6,8 +6,8 @@
 // ------
 
 helloWorld = () => {
-    console.log("[+] Hello World on JS is amazing!");
-    console.log("[+] WOW !!!")
+    console.log("[+] Hello World on JS!");
+    console.log("[+] WOOOWWWW !!!")
 }
 
 helloWorld()

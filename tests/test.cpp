@@ -11,7 +11,7 @@ using namespace std;
 int main()
 {
     // prints hello world
-    cout<<"Hello World on CPP";
-    cout<<"\nMade by Sanix-darker !!!";
+    cout<<"[+] Hello World on CPP";
+    cout<<"\n[+] Cyclop is just AMAZING !!!";
     return 0;
 }
