@@ -1,25 +1,31 @@
-# Cyclope
+
+<img src="./images/logo.png" width="130">
+
+# Cyclop
 
 ## Introduction
 
-While working recently, I had to deal with a slight problem, that of programming and executing the command each time to test my code and the changes I had just made. Admittedly, it's pretty tiring, so I searched everywhere on the web and I came across some great tools to do this like WatchMan from Facebook (HEAVY).
+While working recently, I had to deal with a slight problem, that of programming and executing the command each time to test my code and the changes I had just made. Admittedly, it's pretty tiring, so I searched everywhere on the web and I came across some great tools to do this like WatchMan from Facebook (by the way, too HEAVY :-( ).
+
 The "PROBLEM" with all these solutions made in "Rust", "Python", "Java" or even "C ++" is that I must first install an entire environment, or packages for others .... let's Serious, it's way too heavy!
+
 I think to create a tool that does not require any dependence such as the name of Cyclops in shell form, executable by all computers having bash only (99% i guess lol).
 
 ## Requirements
 
-- Any (By any, i mean any language required, any installation required, any package required, etc...)
+- **NOTHING** (By nothing, i mean, you don't need any language required, any installation required, any package required, etc...)
 
 ## How it's work
 
 The technique is quite simple in itself, I do a hash calculation, which allows me to detect that a modification was made in a file or not, if it is the case I execute the command for which it was configure, that's it!
-Easy is not it?
+Easy is not it? :-)
+
 The advantage with cyclops is that the use can be in another context, Example, I want to execute an X script if a Y.json file changes or update! Everything is configurable :-)
 
 
-## how to use it
+## How to use it
 
-In cyclope.sh, you just need to configure the path of the file to watch and the command to do.
+In cyclop.sh, you just need to configure the path of the file to watch and the command to do.
 
 ```shell
 # We run the import of the table
@@ -32,7 +38,7 @@ declare -A FILE_TO_WATCH=(["./tests/test.js"]="node ./tests/test.js")
 
 ## Tests
 
-You can perform some tests with all available programs in ./test/ by just replace or add :
+You can perform some tests with all available programs in `./test/` directory,just replace or add in cyclop.sh:
 
 ```shell
 
@@ -60,6 +66,13 @@ declare -A FILE_TO_WATCH=( ["./tests/test.rb"]="ruby ./tests/test.rb" )
 
 
 ## DEMO
+
+- With an interpreted language (JavaScript):
+![Demo1](./images/demo.gif)
+
+
+- With a compiled language (C++):
+![Demo2](./images/demo2.gif)
 
 
 ## Author

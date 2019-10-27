@@ -1,16 +1,16 @@
 #!/bin/bash
 #
-#  / ___\ \ / / ___| |   / _ \|  _ \| ____|
-# | |    \ V / |   | |  | | | | |_) |  _|
-# | |___  | || |___| |__| |_| |  __/| |___
-#  \____| |_| \____|_____\___/|_|   |_____|
-#  ----------------------------------------
+#  / ___\ \ / / ___| |   / _ \|  _ \
+# | |    \ V / |   | |  | | | | |_) |
+# | |___  | || |___| |__| |_| |  __/
+#  \____| |_| \____|_____\___/|_|
+#  -----------------------------------
 # A Watcher script that execute any command specified when a file change
 # Made By Sanix-darker
 
 
 # We run the import of the table
-declare -A FILE_TO_WATCH=(["./tests/test.cpp"]="g++ ./tests/test.cpp && ./a.out")
+declare -A FILE_TO_WATCH=(["./tests/test.js"]="node ./tests/test.js")
 #
 # or multiple watching at the same time
 #
@@ -34,7 +34,7 @@ logger()
 ###
 # Main body of script starts here
 ###
-echo "[+] Cyclope is Watching [${!FILE_TO_WATCH[@]}]"
+echo "[+] cyclop is Watching [${!FILE_TO_WATCH[@]}]"
 sum1=""
 while true
 do
@@ -48,7 +48,7 @@ do
             sleep 1
         else
             clear
-            echo "[+] Cyclope detected Changes on ${file}--------"
+            echo "[+] cyclop detected Changes on ${file}--------"
 
             # if [[ ${FILE_TO_WATCH[$file]} == *"&&"* ]]; then
             #     echo "It's there!"
