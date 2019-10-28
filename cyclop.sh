@@ -37,20 +37,21 @@ array_key_exists()
 execute_cmd()
 {
     clear
-    echo "[+] Cyclop detected Changes on $2-------------"
-    echo "[+] BASH VERSION: ${BASH_VERSION}."
-    echo "[+] FILE: "$2
-    echo "[+] MD5SUM: "$(md5sum "$2")
+    echo "[+] ------------------------------------------------------------"
+    echo "[+] Cyclop detected Changes on '$2'"
+    echo "[+] BASH VERSION: [${BASH_VERSION}.]"
+    echo "[+] WATCHING: [$3]"
+    echo "[+] MD5SUM-FILE: '$(md5sum $2)'"
     echo "[+] COMMAND: '$1'"
 
     IFS='&&' read -ra command_list <<< "$1"
     echo ""
-    echo "[+] -------------------------------------------------------"
+    echo "[+] ------------------------------------------------------------"
     for command in "${command_list[@]}"; do
         $command
     done
     echo ""
-    echo "[+] -------------------------------------------------------"
+    echo "[+] ------------------------------------------------------------"
 }
 
 break_loop_if_a_file_allready_changed()
@@ -79,7 +80,7 @@ then
     sum1=""
     while true
     do
-        sleep 1
+        # sleep 1
         for file in ${!FILE_TO_WATCH[@]}
         do
             sum2="$(md5sum "$file")"
@@ -88,7 +89,7 @@ then
             then
                 # We execute the command here,
                 # we pass the command and the file
-                execute_cmd "${FILE_TO_WATCH[$file]}" $file
+                execute_cmd "${FILE_TO_WATCH[$file]}" $file $file
                 sum1="$(md5sum "$file")"
                 logger "[+] $sum1"
             fi
@@ -110,31 +111,37 @@ then
     # We loop all over the extension
     for ext in ${EXTENSIONS_TO_WATCH[@]}
     do
-        # We loop all over the file with the extension provided
-        for file_ext in "${DIRECTORY_TO_WATCH}*.$ext"
+        SUB_DIR_PATCH_LIST=('*.' '*/*.' '*/*/*.' '*/*/*/*.' '*/*/*/*/*.' '*/*/*/*/*/*.' '*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*.')
+        for ext_p in ${SUB_DIR_PATCH_LIST[@]}
         do
-            for file_ext_elt in ${file_ext}
+            # We loop all over the file with the extension provided
+            for file_ext in "${DIRECTORY_TO_WATCH}$ext_p$ext"
             do
-                if [[ "$(array_key_exists 'ARRAY_SUM' $file_ext_elt; echo $?)" = "1" ]]; then
-                    ARRAY_SUM[$file_ext_elt]="$(md5sum ${file_ext_elt})"
-                    logger ">>>> File added to array: $file_ext_elt"
-                fi
+                for file_ext_elt in ${file_ext}
+                do
+                    if test -f "$file_ext_elt"; then
+                        if [[ "$(array_key_exists 'ARRAY_SUM' $file_ext_elt; echo $?)" = "1" ]]; then
+                            ARRAY_SUM[$file_ext_elt]=""
+                            logger ">>>> File added to array: $file_ext_elt"
+                        fi
+                    fi
+                done
             done
         done
     done
 
-    logger "Array: ${!ARRAY_SUM[@]}"
-    logger ""
-    for file_ext_elt in ${!ARRAY_SUM[@]}
-    do
-        logger "${file_ext_elt}: ${ARRAY_SUM[$file_ext_elt]}"
-        execute_cmd "${COMMAND_TO_EXECUTE}" $file_ext_elt
-    done
+    # logger "Array: ${!ARRAY_SUM[@]}"
+    # logger ""
+    # for file_ext_elt in ${!ARRAY_SUM[@]}
+    # do
+    #     logger "${file_ext_elt}: ${ARRAY_SUM[$file_ext_elt]}"
+    #     execute_cmd "${COMMAND_TO_EXECUTE}" $file_ext_elt
+    # done
 
     # Now, the infinite loop !
     while true
     do
-        sleep 1
+        # sleep 1
         for file_ext_elt in ${!ARRAY_SUM[@]}
         do
             file_sum="$(md5sum ${file_ext_elt})"
@@ -143,7 +150,7 @@ then
 
                 # We execute the command here,
                 # we pass the command and the file
-                execute_cmd "${COMMAND_TO_EXECUTE}" $file_ext_elt
+                execute_cmd "${COMMAND_TO_EXECUTE}" $file_ext_elt "${EXTENSIONS_TO_WATCH[@]}"
                 break
             fi
         done

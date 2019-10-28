@@ -26,7 +26,7 @@ The advantage with cyclops is that the use can be in another context, Example, I
 ## How to use it
 
 
-### For watching files
+### Watch files
 
 You need to use the `f` parameter to watch files, as follow :
 
@@ -76,27 +76,46 @@ Some implementations examples:
 ./cyclop.sh f '(["./tests/test.rb"]="ruby ./tests/test.rb" ["./tests/test.js"]="node ./tests/test.js" ["./tests/test.py"]="python ./tests/test.py")'
 ```
 
-### For watching extensions
+### Watch extensions
 
 You need to use the `e` parameter to watch extensions's files, as follow :
 
 This is how to use it :
-`./cyclop.sh e './path/to/the/dir/' 'extension1 extension2 extension3' 'your command'`
+`./cyclop.sh e './path/to/the/project/dir/' 'extension1 extension2 extension3' 'your command'`
 
 Some implementations examples:
 
 ```shell
-# For PY (all python files)
-./cyclop.sh e './tests/' 'c' 'echo "Changes detected on C file"'
+# For PY (All python files)
+./cyclop.sh e './tests/' 'py' 'echo "Changes detected on PY file"'
 
-# For C, CPP (all c files and cpp files)
+# For C, CPP (All c and cpp files)
 ./cyclop.sh e './tests/' 'c cpp' 'echo "Changes detected on C, CPP file"'
 
 # For JS, RB, JAVA (Watch All javascript, ruby and java files)
 ./cyclop.sh e './tests/' 'js rb java' 'echo "Changes detected on JS, RB, JAVA file"'
 ```
 
-### DEMO
+### Some tests
+
+After cloning, you can test this command :
+
+##### Command
+
+```shell
+./cyclop.sh e './tests/' 'js py rb' 'echo [+] Changes detected,Cyclop is amazing !!!'
+```
+
+This command will watch all file changes with extensions(`.js`, `.py` and `.rb`) in `./tests/` directory, and then execute your command, in this case : `echo [+] Changes detected,Cyclop is amazing !!!` !
+
+##### Output
+
+<img src="./images/output.png" />
+
+
+### SOME DEMOS
+
+**Note**: Some of theese demo are not for the latest version, some output could have been changed/updated.
 
 - With an interpreted language (JavaScript):
 ![Demo1](./images/demo.gif)
@@ -105,8 +124,18 @@ Some implementations examples:
 - With a compiled language (C++):
 ![Demo2](./images/demo2.gif)
 
-
 This is a video of the test with Cyclop on VSCODE : [SEE THE VIDEO](https://www.youtube.com/watch?v=xF5nznQwhcg)
+
+
+## IMPORTANT NOTES
+
+My Bash version is `4.3.32` on my Linux system, i didn't test Cyclop in many versions.
+
+Cyclop have been test on :
+
+- [TESTED] Linux (Ubuntu distribution)
+- [TESTED] MacOS
+- [NOT-YET] WINDOWS (Not yet, but with a cygin or an interpreter command on bash it should work,  will work for a .bat version specially for windows developers)
 
 ## Author
 
