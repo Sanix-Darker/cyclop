@@ -111,7 +111,10 @@ then
     # We loop all over the extension
     for ext in ${EXTENSIONS_TO_WATCH[@]}
     do
-        SUB_DIR_PATCH_LIST=('*.' '*/*.' '*/*/*.' '*/*/*/*.' '*/*/*/*/*.' '*/*/*/*/*/*.' '*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*.')
+        SUB_DIR_PATCH_LIST=('*.' '*/*.' '*/*/*.' '*/*/*/*.' '*/*/*/*/*.' '*/*/*/*/*/*.' \
+        '*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*.' \
+        '*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*/*.' \
+        '*/*/*/*/*/*/*/*/*/*/*/*/*/*.')
         for ext_p in ${SUB_DIR_PATCH_LIST[@]}
         do
             # We loop all over the file with the extension provided
@@ -121,7 +124,7 @@ then
                 do
                     if test -f "$file_ext_elt"; then
                         if [[ "$(array_key_exists 'ARRAY_SUM' $file_ext_elt; echo $?)" = "1" ]]; then
-                            ARRAY_SUM[$file_ext_elt]=""
+                            ARRAY_SUM["$file_ext_elt"]=""
                             logger ">>>> File added to array: $file_ext_elt"
                         fi
                     fi
@@ -146,7 +149,7 @@ then
         do
             file_sum="$(md5sum ${file_ext_elt})"
             if [ "${ARRAY_SUM[$file_ext_elt]}" != "${file_sum}" ]; then
-                ARRAY_SUM[$file_ext_elt]="${file_sum}"
+                ARRAY_SUM["$file_ext_elt"]="${file_sum}"
 
                 # We execute the command here,
                 # we pass the command and the file
