@@ -102,7 +102,7 @@ then
     COMMAND_TO_EXECUTE='cat test.txt' # =$3
 
     echo "[+] Cyclop is Watching file with extensions : [${EXTENSIONS_TO_WATCH[@]}] in ${DIRECTORY_TO_WATCH}"
-    declare -A ARRAY_SUM
+    declare -A ARRAY_SUM=()
     while true
     do
         sleep 5
@@ -111,39 +111,46 @@ then
         for ext in ${EXTENSIONS_TO_WATCH[@]}
         do
 
-            # break_loop_if_a_file_allready_changed "$BREAK_IF_CHANGE"
-
             # We loop all over the file with the extension provided
             for file_ext in "${DIRECTORY_TO_WATCH}*.$ext"
             do
-
                 for file_ext_elt in ${file_ext}
                 do
-                    echo $file_ext_elt
-                    echo "$file_sum"
                     file_sum="$(md5sum ${file_ext_elt})"
-                    if [[ "$(array_key_exists 'ARRAY_SUM' 'file_ext_elt'; echo $?)" = "1" ]]; then
-                        $ARRAY_SUM[$file_ext_elt]=$file_ext_elt
-                        echo "File added"
-                    else
-                        if [ ${ARRAY_SUM[$file_ext_elt]}!=$file_sum ]; then
-                            echo "Something changed on $file_ext_elt"
-                        fi
+                    if [[ "$(array_key_exists 'ARRAY_SUM' $file_ext_elt; echo $?)" = "1" ]]; then
+                        ARRAY_SUM[$file_ext_elt]="${file_sum}"
+                        echo ">>>> File added"
                     fi
-
-                    # if [ $sum["'${file_ext_elt}'"]!="'$file_sum'" ];
-                    # then
-                    #     # We execute the command here,
-                    #     # we pass the command and the file
-                    #     execute_cmd "${COMMAND_TO_EXECUTE}" "(js py rb)"
-                    #     BREAK_IF_CHANGE="1"
-                    # fi
-
-                    echo "sun: $ARRAY_SUM"
-
                 done
-                # for file_ext_elt in $file_ext
 
+                for file_ext_elt in ${!ARRAY_SUM[@]}
+                do
+                    file_sum="$(md5sum ${file_ext_elt})"
+
+                    echo "}}}}}} ${file_sum}: ${ARRAY_SUM[$file_ext_elt]}"
+
+                    if [ "${ARRAY_SUM[$file_ext_elt]}"!="${file_sum}" ] || [ "$BREAK_IF_CHANGE"!="1" ]; then
+                        echo "[+] FILE: "$file_ext_elt
+                        echo "[+] MD5SUM: "$file_sum
+                        echo "[+] Something changed on $file_ext_elt"
+                        echo "We execute the command."
+                        BREAK_IF_CHANGE="1"
+                        break
+                    else
+                        ARRAY_SUM[$file_ext_elt]="$file_sum"
+                        BREAK_IF_CHANGE="0"
+                    fi
+                done
+
+                echo "Array: ${!ARRAY_SUM[@]}"
+
+                # for file_ext_elt in $file_ext
+                #     if [ "$ARRAY_SUM[$file_ext_elt]"!="$file_sum" ]; then
+                #         echo "Something changed on $file_ext_elt"
+                #         echo "We execute the command."
+                #         break
+                #     fi
+                # done
                 #     # if [ $sum["'${file_ext_elt}'"]!="'$file_sum'" ];
                 #     # then
                 #     #     # We execute the command here,
