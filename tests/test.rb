@@ -5,3 +5,4 @@
 # ------
 
 puts "[+] Hello, world!"
+puts "[+] CyClop is realy amazing!"

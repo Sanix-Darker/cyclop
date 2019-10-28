@@ -11,14 +11,14 @@
 
 # Some methods
 # We specify if we want to see logs or not
-SEE_LOGS=0
+SEE_LOGS="1"
 
 ###
 # The logger method
 ###
 logger()
 {
-    if [ $SEE_LOGS = 1 ]
+    if [ "$SEE_LOGS" = "1" ] # "0" for the oppossite
     then
         echo $1
     fi
@@ -36,18 +36,21 @@ array_key_exists()
 
 execute_cmd()
 {
-    #clear
-    echo "[+] Cyclop detected Changes on $2--------"
-    echo "[+] Bash version: ${BASH_VERSION}."
-    echo "[+] Command: '$1'"
+    clear
+    echo "[+] Cyclop detected Changes on $2-------------"
+    echo "[+] BASH VERSION: ${BASH_VERSION}."
+    echo "[+] FILE: "$2
+    echo "[+] MD5SUM: "$(md5sum "$2")
+    echo "[+] COMMAND: '$1'"
 
     IFS='&&' read -ra command_list <<< "$1"
     echo ""
-    echo "[+] --------------------------------------------------"
+    echo "[+] -------------------------------------------------------"
     for command in "${command_list[@]}"; do
         $command
     done
-    echo "[+] --------------------------------------------------"
+    echo ""
+    echo "[+] -------------------------------------------------------"
 }
 
 break_loop_if_a_file_allready_changed()
@@ -76,6 +79,7 @@ then
     sum1=""
     while true
     do
+        sleep 1
         for file in ${!FILE_TO_WATCH[@]}
         do
             sum2="$(md5sum "$file")"
@@ -85,7 +89,6 @@ then
                 # We execute the command here,
                 # we pass the command and the file
                 execute_cmd "${FILE_TO_WATCH[$file]}" $file
-
                 sum1="$(md5sum "$file")"
                 logger "[+] $sum1"
             fi
@@ -98,78 +101,53 @@ then
     # We run the import of the table
     # declare -A EXTENSIONS_TO_WATCH=$2
     DIRECTORY_TO_WATCH=$2 # For example './tests/'
-    EXTENSIONS_TO_WATCH=(js py rb)  # =$3
-    COMMAND_TO_EXECUTE='cat test.txt' # =$3
+    EXTENSIONS_TO_WATCH=$3  # For example 'js py rb'
+    COMMAND_TO_EXECUTE=$4 # For example 'echo "Cyclop works"'
 
     echo "[+] Cyclop is Watching file with extensions : [${EXTENSIONS_TO_WATCH[@]}] in ${DIRECTORY_TO_WATCH}"
     declare -A ARRAY_SUM=()
-    while true
+
+    # We loop all over the extension
+    for ext in ${EXTENSIONS_TO_WATCH[@]}
     do
-        sleep 5
-        BREAK_IF_CHANGE="0" # This parameter will tell if we need to break the loop, when a file change
-        # We loop all over the extension
-        for ext in ${EXTENSIONS_TO_WATCH[@]}
+        # We loop all over the file with the extension provided
+        for file_ext in "${DIRECTORY_TO_WATCH}*.$ext"
         do
-
-            # We loop all over the file with the extension provided
-            for file_ext in "${DIRECTORY_TO_WATCH}*.$ext"
+            for file_ext_elt in ${file_ext}
             do
-                for file_ext_elt in ${file_ext}
-                do
-                    file_sum="$(md5sum ${file_ext_elt})"
-                    if [[ "$(array_key_exists 'ARRAY_SUM' $file_ext_elt; echo $?)" = "1" ]]; then
-                        ARRAY_SUM[$file_ext_elt]="${file_sum}"
-                        echo ">>>> File added"
-                    fi
-                done
-
-                for file_ext_elt in ${!ARRAY_SUM[@]}
-                do
-                    file_sum="$(md5sum ${file_ext_elt})"
-
-                    echo "}}}}}} ${file_sum}: ${ARRAY_SUM[$file_ext_elt]}"
-
-                    if [ "${ARRAY_SUM[$file_ext_elt]}"!="${file_sum}" ] || [ "$BREAK_IF_CHANGE"!="1" ]; then
-                        echo "[+] FILE: "$file_ext_elt
-                        echo "[+] MD5SUM: "$file_sum
-                        echo "[+] Something changed on $file_ext_elt"
-                        echo "We execute the command."
-                        BREAK_IF_CHANGE="1"
-                        break
-                    else
-                        ARRAY_SUM[$file_ext_elt]="$file_sum"
-                        BREAK_IF_CHANGE="0"
-                    fi
-                done
-
-                echo "Array: ${!ARRAY_SUM[@]}"
-
-                # for file_ext_elt in $file_ext
-                #     if [ "$ARRAY_SUM[$file_ext_elt]"!="$file_sum" ]; then
-                #         echo "Something changed on $file_ext_elt"
-                #         echo "We execute the command."
-                #         break
-                #     fi
-                # done
-                #     # if [ $sum["'${file_ext_elt}'"]!="'$file_sum'" ];
-                #     # then
-                #     #     # We execute the command here,
-                #     #     # we pass the command and the file
-                #     #     execute_cmd "${COMMAND_TO_EXECUTE}" "(js py rb)"
-                #     #     BREAK_IF_CHANGE="1"
-                #     # fi
-
-                #     # break_loop_if_a_file_allready_changed "$BREAK_IF_CHANGE"
-                #     echo "loop"
-                # done
-
-                # break_loop_if_a_file_allready_changed "$BREAK_IF_CHANGE"
+                if [[ "$(array_key_exists 'ARRAY_SUM' $file_ext_elt; echo $?)" = "1" ]]; then
+                    ARRAY_SUM[$file_ext_elt]="$(md5sum ${file_ext_elt})"
+                    logger ">>>> File added to array: $file_ext_elt"
+                fi
             done
         done
     done
 
-    echo "This feature not ready yet !"
-    sleep 1
+    logger "Array: ${!ARRAY_SUM[@]}"
+    logger ""
+    for file_ext_elt in ${!ARRAY_SUM[@]}
+    do
+        logger "${file_ext_elt}: ${ARRAY_SUM[$file_ext_elt]}"
+        execute_cmd "${COMMAND_TO_EXECUTE}" $file_ext_elt
+    done
+
+    # Now, the infinite loop !
+    while true
+    do
+        sleep 1
+        for file_ext_elt in ${!ARRAY_SUM[@]}
+        do
+            file_sum="$(md5sum ${file_ext_elt})"
+            if [ "${ARRAY_SUM[$file_ext_elt]}" != "${file_sum}" ]; then
+                ARRAY_SUM[$file_ext_elt]="${file_sum}"
+
+                # We execute the command here,
+                # we pass the command and the file
+                execute_cmd "${COMMAND_TO_EXECUTE}" $file_ext_elt
+                break
+            fi
+        done
+    done
 else
-    echo 'Bad parameters provided, have a look at the documentation !'
+    echo 'Bad parameters provided, have a look at the documentation (e or f) need to be provided!'
 fi

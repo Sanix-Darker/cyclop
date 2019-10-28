@@ -26,9 +26,9 @@ The advantage with cyclops is that the use can be in another context, Example, I
 ## How to use it
 
 
-### Watch files then execute a command
+### For watching files
 
-You need to use the `f` parameter to watch files, and to test, you just have to hit for example :
+You need to use the `f` parameter to watch files, as follow :
 
 This is how to use it :
 `./cyclop.sh f '( ["./path/to/file/to/watch"]="command to execute when the file content will change" )'`
@@ -36,7 +36,6 @@ This is how to use it :
 Some implementations examples:
 
 ```shell
-
 # For C
 ./cyclop.sh f '( ["./tests/test.c"]="gcc ./tests/test.c && ./a.out" )'
 
@@ -75,6 +74,26 @@ Some implementations examples:
 # or multiple watching at the same time
 #
 ./cyclop.sh f '(["./tests/test.rb"]="ruby ./tests/test.rb" ["./tests/test.js"]="node ./tests/test.js" ["./tests/test.py"]="python ./tests/test.py")'
+```
+
+### For watching extensions
+
+You need to use the `e` parameter to watch extensions's files, as follow :
+
+This is how to use it :
+`./cyclop.sh e './path/to/the/dir/' 'extension1 extension2 extension3' 'your command'`
+
+Some implementations examples:
+
+```shell
+# For PY (all python files)
+./cyclop.sh e './tests/' 'c' 'echo "Changes detected on C file"'
+
+# For C, CPP (all c files and cpp files)
+./cyclop.sh e './tests/' 'c cpp' 'echo "Changes detected on C, CPP file"'
+
+# For JS, RB, JAVA (Watch All javascript, ruby and java files)
+./cyclop.sh e './tests/' 'js rb java' 'echo "Changes detected on JS, RB, JAVA file"'
 ```
 
 ### DEMO
