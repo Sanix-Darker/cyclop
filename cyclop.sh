@@ -11,7 +11,7 @@
 
 # Some methods
 # We specify if we want to see logs or not
-SEE_LOGS="1"
+SEE_LOGS="0"
 
 ###
 # The logger method
@@ -24,6 +24,9 @@ logger()
     fi
 }
 
+###
+# This method check if a key is available in an array
+###
 array_key_exists()
 {
     local _array_name="$1"
@@ -34,6 +37,9 @@ array_key_exists()
     [[ "$_key_exists" = "0" ]] && return 0 || return 1
 }
 
+###
+# The execute command
+###
 execute_cmd()
 {
     clear
@@ -54,33 +60,21 @@ execute_cmd()
     echo "[+] ------------------------------------------------------------"
 }
 
-break_loop_if_a_file_allready_changed()
-{
-    # We will Break the loop if a file in the list is allready change
-    if ["$1"="1"]; then
-        break
-    fi
-}
 
 
-if [ "$1" = "f" ];
-then
+#####
+# Main body of script starts here
+#####
+if [ "$1" = "f" ]; then
 
     # We run the import of the table
     declare -A FILE_TO_WATCH=$2
-    #
-    # or multiple watching at the same time
-    #
-    # declare -A FILE_TO_WATCH=(["./tests/test.rb"]="ruby ./tests/test.rb" ["./tests/test.js"]="node ./tests/test.js" ["./tests/test.py"]="python ./tests/test.py")
 
-    ###
-    # Main body of script starts here
-    ###
-    echo "[+] cyclop is Watching [${!FILE_TO_WATCH[@]}]"
+    echo "[+] Cyclop is Watching [${!FILE_TO_WATCH[@]}]"
     sum1=""
     while true
     do
-        # sleep 1
+        sleep 1
         for file in ${!FILE_TO_WATCH[@]}
         do
             sum2="$(md5sum "$file")"
@@ -95,12 +89,10 @@ then
             fi
         done
     done
-# extension list, the logic here is to save in an associativ array the list of all file with a specific extensions,
-# and thier checkSum then looping throught them and execute a specific command when things changes
-elif [ "$1" = "e" ];
-then
+elif [ "$1" = "e" ]; then # extension list, the logic here is to save in an associativ array the list of all file with a specific extensions,
+                            # and thier checkSum then looping throught them and execute a specific command when things changes
+
     # We run the import of the table
-    # declare -A EXTENSIONS_TO_WATCH=$2
     DIRECTORY_TO_WATCH=$2 # For example './tests/'
     EXTENSIONS_TO_WATCH=$3  # For example 'js py rb'
     COMMAND_TO_EXECUTE=$4 # For example 'echo "Cyclop works"'
@@ -114,7 +106,7 @@ then
         SUB_DIR_PATCH_LIST=('*.' '*/*.' '*/*/*.' '*/*/*/*.' '*/*/*/*/*.' '*/*/*/*/*/*.' \
         '*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*.' \
         '*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*/*.' \
-        '*/*/*/*/*/*/*/*/*/*/*/*/*/*.')
+        '*/*/*/*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*.')
         for ext_p in ${SUB_DIR_PATCH_LIST[@]}
         do
             # We loop all over the file with the extension provided
@@ -124,7 +116,7 @@ then
                 do
                     if test -f "$file_ext_elt"; then
                         if [[ "$(array_key_exists 'ARRAY_SUM' $file_ext_elt; echo $?)" = "1" ]]; then
-                            ARRAY_SUM["$file_ext_elt"]=""
+                            ARRAY_SUM[$file_ext_elt]=""
                             logger ">>>> File added to array: $file_ext_elt"
                         fi
                     fi
@@ -133,18 +125,10 @@ then
         done
     done
 
-    # logger "Array: ${!ARRAY_SUM[@]}"
-    # logger ""
-    # for file_ext_elt in ${!ARRAY_SUM[@]}
-    # do
-    #     logger "${file_ext_elt}: ${ARRAY_SUM[$file_ext_elt]}"
-    #     execute_cmd "${COMMAND_TO_EXECUTE}" $file_ext_elt
-    # done
-
     # Now, the infinite loop !
     while true
     do
-        # sleep 1
+        sleep 1
         for file_ext_elt in ${!ARRAY_SUM[@]}
         do
             file_sum="$(md5sum ${file_ext_elt})"

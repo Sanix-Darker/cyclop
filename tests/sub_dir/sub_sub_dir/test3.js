@@ -4,8 +4,8 @@
 // ./cyclop.sh f '(["./tests/test.js"]="node ./tests/test.js")'
 // ------
 
+
 helloWorld = () => {
-    console.log("[+] Hello World II");
-    console.log("[+] Cyclop is amazing !!!")
+    console.log("[+] First release of Cyclop is now available !");
 }
 helloWorld()

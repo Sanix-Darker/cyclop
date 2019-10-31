@@ -6,7 +6,7 @@
 
 def helloWorld():
     print("[+] Hello World !")
-    print("[+] Cyclop is amazing, right, just amazing ?")
+    print("[+] Cyclop is just amazing ?")
     print("[+] AWESOME !")
 
 helloWorld()
