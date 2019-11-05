@@ -8,6 +8,6 @@ class Test
     public static void main(String args[])
     {
         System.out.println("[+] Hello, World on JAVA!");
-        System.out.println("[+] Wow Cyclop is working very Well Right ?");
+        System.out.println("[+] Wow Cyclop is working very Well Right !?");
     }
 }

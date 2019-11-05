@@ -24,6 +24,39 @@ logger()
     fi
 }
 
+
+###
+# The Checksum method
+###
+checkSum()
+{
+    value=""
+    # We check the system, then we compute the md5Sum
+    if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        value=$(md5sum $1)
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        value=$(md5 $1)
+    elif [[ "$OSTYPE" == "cygwin" ]]; then
+        # POSIX compatibility layer and Linux environment emulation for Windows
+        value=$(md5sum $1)
+    elif [[ "$OSTYPE" == "msys" ]]; then
+        # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+        value=$(FCIV -md5 -sha1 $1)
+    elif [[ "$OSTYPE" == "win32" ]]; then
+        # I'm not sure this can happen.
+        value=$(FCIV -md5 -sha1 $1)
+    elif [[ "$OSTYPE" == "freebsd"* ]]; then
+        value=$(md5sum $1)
+    else
+        # Unknown.
+        echo "Unknown System"
+        value="$(md5sum $1)"
+    fi
+    echo $value
+}
+
+
+
 ###
 # This method check if a key is available in an array
 ###
@@ -45,9 +78,9 @@ execute_cmd()
     clear
     echo "[+] ------------------------------------------------------------"
     echo "[+] Cyclop detected Changes on '$2'"
-    echo "[+] BASH VERSION: [${BASH_VERSION}.]"
+    echo "[+] BASH VERSION: [${BASH_VERSION}.], OS: [${OSTYPE}]"
     echo "[+] WATCHING: [$3]"
-    echo "[+] MD5SUM-FILE: '$(md5sum $2)'"
+    echo "[+] MD5SUM-FILE: '"$(checkSum $2)"'"
     echo "[+] COMMAND: '$1'"
 
     IFS='&&' read -ra command_list <<< "$1"
@@ -77,14 +110,14 @@ if [ "$1" = "f" ]; then
         sleep 1
         for file in ${!FILE_TO_WATCH[@]}
         do
-            sum2="$(md5sum "$file")"
+            sum2=$(checkSum $file)
             logger "[+] $sum2"
             if [ "$sum1" != "$sum2" ];
             then
                 # We execute the command here,
                 # we pass the command and the file
                 execute_cmd "${FILE_TO_WATCH[$file]}" $file $file
-                sum1="$(md5sum "$file")"
+                sum1=$(checkSum $file)
                 logger "[+] $sum1"
             fi
         done
@@ -131,7 +164,7 @@ elif [ "$1" = "e" ]; then # extension list, the logic here is to save in an asso
         sleep 1
         for file_ext_elt in ${!ARRAY_SUM[@]}
         do
-            file_sum="$(md5sum ${file_ext_elt})"
+            file_sum=$(checkSum ${file_ext_elt})
             if [ "${ARRAY_SUM[$file_ext_elt]}" != "${file_sum}" ]; then
                 ARRAY_SUM["$file_ext_elt"]="${file_sum}"
 
