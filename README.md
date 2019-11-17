@@ -26,6 +26,27 @@ The advantage with cyclops is that the use can be in another context, Example, I
 ## How to use it
 
 
+### Watch extensions
+
+You need to use the `e` parameter to watch extensions's files, as follow :
+
+This is how to use it :
+`./cyclop.sh e './path/to/the/project/dir/' 'extension1 extension2 extension3' 'your command'`
+
+Some implementations examples:
+
+```shell
+# For PY (All python files)
+./cyclop.sh e './tests/' 'py' 'echo "Changes detected on PY file"'
+
+# For C, CPP (All c and cpp files)
+./cyclop.sh e './tests/' 'c cpp' 'echo "Changes detected on C, CPP file"'
+
+# For JS, RB, JAVA (Watch All javascript, ruby and java files)
+./cyclop.sh e './tests/' 'js rb java' 'echo "Changes detected on JS, RB, JAVA file"'
+```
+
+
 ### Watch files
 
 You need to use the `f` parameter to watch files, as follow :
@@ -74,26 +95,6 @@ Some implementations examples:
 # or multiple watching at the same time
 #
 ./cyclop.sh f '(["./tests/test.rb"]="ruby ./tests/test.rb" ["./tests/test.js"]="node ./tests/test.js" ["./tests/test.py"]="python ./tests/test.py")'
-```
-
-### Watch extensions
-
-You need to use the `e` parameter to watch extensions's files, as follow :
-
-This is how to use it :
-`./cyclop.sh e './path/to/the/project/dir/' 'extension1 extension2 extension3' 'your command'`
-
-Some implementations examples:
-
-```shell
-# For PY (All python files)
-./cyclop.sh e './tests/' 'py' 'echo "Changes detected on PY file"'
-
-# For C, CPP (All c and cpp files)
-./cyclop.sh e './tests/' 'c cpp' 'echo "Changes detected on C, CPP file"'
-
-# For JS, RB, JAVA (Watch All javascript, ruby and java files)
-./cyclop.sh e './tests/' 'js rb java' 'echo "Changes detected on JS, RB, JAVA file"'
 ```
 
 ### Some tests
