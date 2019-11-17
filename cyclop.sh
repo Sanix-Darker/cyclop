@@ -15,11 +15,10 @@ SEE_LOGS="0"
 
 ###
 # The logger method
-###
+######
 logger()
 {
-    if [ "$SEE_LOGS" = "1" ] # "0" for the oppossite
-    then
+    if [ "$SEE_LOGS" = "1" ];then # "0" for the oppossite
         echo $1
     fi
 }
@@ -27,7 +26,7 @@ logger()
 
 ###
 # The Checksum method
-###
+######
 checkSum()
 {
     value=""
@@ -56,10 +55,9 @@ checkSum()
 }
 
 
-
 ###
 # This method check if a key is available in an array
-###
+######
 array_key_exists()
 {
     local _array_name="$1"
@@ -72,32 +70,28 @@ array_key_exists()
 
 ###
 # The execute command
-###
+######
 execute_cmd()
 {
     clear
     echo "[+] ------------------------------------------------------------"
-    echo "[+] Cyclop detected Changes on '$2'"
-    echo "[+] BASH VERSION: [${BASH_VERSION}.], OS: [${OSTYPE}]"
-    echo "[+] WATCHING: [$3]"
-    echo "[+] MD5SUM-FILE: '"$(checkSum $2)"'"
+    echo "[+] CYCLOP: BASH VERSION: [${BASH_VERSION}.], OS: [${OSTYPE}], WATCHING: [$3]"
+    echo "[+] CHANGES DETECTED ON: '$2', MD5SUM-FILE: '"$(checkSum $2)"'"
     echo "[+] COMMAND: '$1'"
-
     IFS='&&' read -ra command_list <<< "$1"
-    echo ""
     echo "[+] ------------------------------------------------------------"
     for command in "${command_list[@]}"; do
         $command
     done
-    echo ""
     echo "[+] ------------------------------------------------------------"
 }
 
 
+# ----------
 
 #####
 # Main body of script starts here
-#####
+######
 if [ "$1" = "f" ]; then
 
     # We run the import of the table
@@ -137,9 +131,7 @@ elif [ "$1" = "e" ]; then # extension list, the logic here is to save in an asso
     for ext in ${EXTENSIONS_TO_WATCH[@]}
     do
         SUB_DIR_PATCH_LIST=('*.' '*/*.' '*/*/*.' '*/*/*/*.' '*/*/*/*/*.' '*/*/*/*/*/*.' \
-        '*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*.' \
-        '*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*/*.' \
-        '*/*/*/*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*.')
+        '*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*.' '*/*/*/*/*/*/*/*/*/*.' )
         for ext_p in ${SUB_DIR_PATCH_LIST[@]}
         do
             # We loop all over the file with the extension provided
@@ -176,5 +168,5 @@ elif [ "$1" = "e" ]; then # extension list, the logic here is to save in an asso
         done
     done
 else
-    echo 'Bad parameters provided, have a look at the documentation (e or f) need to be provided!'
+    echo 'Bad parameters provided, have a look at the README DOCUMENTATION (with parameters e or f) need to be provided!'
 fi
