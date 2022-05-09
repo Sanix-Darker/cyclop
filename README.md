@@ -25,6 +25,21 @@ The advantage with cyclops is that the use can be in another context, Example, I
 
 ## How to use it
 
+First you need to get the bash script
+```bash
+# use wget to download the shell from the branch or tag you want !
+wget https://raw.githubusercontent.com/Sanix-Darker/cyclop/master/cyclop.sh
+```
+Then you need to add execution permissions on the bash file
+```bash
+chmod +x ./cyclop.sh
+```
+
+And you're all set to start using cyclop !
+Optionally, you can create an alias for it !
+```bash
+alias cyp='$HOME/cyclop.sh'
+```
 
 ### Watch extensions
 
