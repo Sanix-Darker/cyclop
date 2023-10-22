@@ -55,6 +55,7 @@ checkSum()
     echo "$value"
 }
 
+echo "THIS IS A TEST FOR MY BACKPORT !!!"
 
 ###
 # This method check if a key is available in an array
